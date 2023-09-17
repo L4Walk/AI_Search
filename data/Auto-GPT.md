@@ -1,0 +1,3 @@
+# Auto-GPT
+
+Auto-GPT是一个实验性开源应用程序，展示了GPT-4语言模型的真正潜力，GitHub上超10万人星标。该程序由 <a href="https://ai-bot.cn/sites/49.html">GPT-4</a> 驱动，将<a href="https://ai-bot.cn/what-is-large-language-model/">LLM大语言模型</a>思想链接在一起，以自主实现你设定的任何目标。作为GPT-4完全自主运行的首批例子之一，Auto-GPT突破了人工智能的极限，距离<a href="https://ai-bot.cn/what-is-agi-artificial-general-intelligence/">AGI通用人工智能</a>又近了一步。<strong>大家注意甄别autogpt.net不是其官方网站，agpt.co才是。</strong>

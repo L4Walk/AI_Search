@@ -1,0 +1,2 @@
+# writesonic-icon
+

@@ -1,0 +1,3 @@
+# StudyCorgi ChatGPT Detector
+
+StudyCorgi推出的帮助学生检测ChatGPT的工具
