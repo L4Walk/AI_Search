@@ -1,3 +1,7 @@
+from fastapi import FastAPI, Depends, HTTPException
+from typing import Optional
+from pydantic import BaseModel
+
 from langchain.document_loaders import WebBaseLoader
 from langchain.indexes import VectorstoreIndexCreator
 from langchain.document_loaders import UnstructuredMarkdownLoader
@@ -11,7 +15,9 @@ from langchain.document_loaders import DirectoryLoader
 from langchain.prompts import PromptTemplate
 import os
 
-OPENAI_API_KEY = "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"
+app = FastAPI()
+
+OPENAI_API_KEY = "sk- XXXXXX"
 #openai_api_key = os.environ.get("OPENAI_API_KEY")
 openai_api_key = OPENAI_API_KEY
 
@@ -51,11 +57,7 @@ all_splits = text_splitter.split_documents(docs)
 # 向量数据库存储
 vectorstore = Chroma.from_documents(documents=all_splits, embedding=OpenAIEmbeddings(openai_api_key= OPENAI_API_KEY))
 
-# 使用相似性搜索检索任何问题的相关拆分。
-question = "我的代码有问题"
-print(question)
-docs = vectorstore.similarity_search(question)
-len(docs)
+
 
 #生成
 llm = ChatOpenAI(model_name="gpt-3.5-turbo", temperature=0, openai_api_key=OPENAI_API_KEY)
@@ -64,6 +66,29 @@ qa_chain = RetrievalQA.from_chain_type(llm,
                                        return_source_documents=True,
                                        chain_type_kwargs={"prompt": QA_CHAIN_PROMPT}
 )
+
+#定义请求和响应模型
+class QueryModel(BaseModel):
+    query: str
+
+
+class ResponseModel(BaseModel):
+    result: str
+    source_documents: list
+
+@app.post("/ask", response_model=ResponseModel)
+async def ask_question(query: QueryModel):
+    result = qa_chain(query.dict())
+    return {
+        "result": result["result"],
+        "source_documents": result["source_documents"]
+    }
+
+# 使用相似性搜索检索任何问题的相关拆分。
+question = "我的代码有问题"
+print(question)
+docs = vectorstore.similarity_search(question)
+len(docs)
 
 result = qa_chain({"query": question})
 
