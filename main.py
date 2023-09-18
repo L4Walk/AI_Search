@@ -17,21 +17,13 @@ import os
 
 app = FastAPI()
 
-OPENAI_API_KEY = "sk- XXXXXX"
-#openai_api_key = os.environ.get("OPENAI_API_KEY")
+OPENAI_API_KEY = "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"
 openai_api_key = OPENAI_API_KEY
 
 print("OpenAI API Key:", openai_api_key)
 
-
-""" 嵌入markdown
-loader = UnstructuredMarkdownLoader(
-    "./data/AI大学堂.md", mode="elements", strategy="fast",
-)
-"""
-
 # 提示词
-prompt_template="""
+prompt_template = """
 使用以下的上下文来回答最后的问题。 \
 最多用三句话，回答要尽可能简明扼要。\
 在回答的最后一定要说"或许你可以试试下面的工具".
@@ -44,6 +36,11 @@ Helpful Answer:
 QA_CHAIN_PROMPT = PromptTemplate.from_template(prompt_template)
 
 #加载数据
+""" 嵌入markdown
+loader = UnstructuredMarkdownLoader(
+    "./data/AI大学堂.md", mode="elements", strategy="fast",
+)
+"""
 loader = DirectoryLoader('./data/', glob="**/*.md", show_progress=True, use_multithreading=True)
 docs = loader.load()
 
@@ -55,7 +52,7 @@ text_splitter = RecursiveCharacterTextSplitter(chunk_size = 500, chunk_overlap =
 all_splits = text_splitter.split_documents(docs)
 
 # 向量数据库存储
-vectorstore = Chroma.from_documents(documents=all_splits, embedding=OpenAIEmbeddings(openai_api_key= OPENAI_API_KEY))
+vectorstore = Chroma.from_documents(documents=all_splits, embedding=OpenAIEmbeddings(openai_api_key = OPENAI_API_KEY))
 
 
 
@@ -84,7 +81,12 @@ async def ask_question(query: QueryModel):
         "source_documents": result["source_documents"]
     }
 
+@app.get("/")
+def read_root():
+    return {"Hello": "World"}
+
 # 使用相似性搜索检索任何问题的相关拆分。
+"""
 question = "我的代码有问题"
 print(question)
 docs = vectorstore.similarity_search(question)
@@ -94,7 +96,6 @@ result = qa_chain({"query": question})
 
 print(result["result"])
 print(result["source_documents"])
-
-
+"""
 
 
