@@ -17,7 +17,7 @@ import os
 
 app = FastAPI()
 
-OPENAI_API_KEY = "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"
+OPENAI_API_KEY = "sk-apikey"
 openai_api_key = OPENAI_API_KEY
 
 print("OpenAI API Key:", openai_api_key)
